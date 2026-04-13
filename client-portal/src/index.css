@@ -1,0 +1,87 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --color-brand-navy: #1A3A6B;
+  --color-brand-blue: #2563A8;
+  --color-brand-cyan: #4A90C4;
+  --color-brand-charcoal: #2D2D2D;
+  --color-brand-bg: #EBF0F7;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-brand-charcoal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+}
+
+/* Receipt images */
+.receipt-img {
+  position: absolute;
+  pointer-events: none;
+  transform-origin: center center;
+  backface-visibility: hidden;
+}
+
+/* Task circle styles */
+.task-circle {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  border: 3px solid #CBD5E1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #94A3B8;
+  position: relative;
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+}
+.task-circle.active { border-color: transparent; }
+.task-circle.active::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #1A3A6B;
+  border-right-color: #1A3A6B;
+  animation: spin 1s linear infinite;
+}
+.task-circle.complete {
+  background-color: #1A3A6B;
+  border-color: #1A3A6B;
+  color: white;
+}
+.task-circle.complete .task-check {
+  stroke: white;
+}
+.task-line {
+  width: 3px;
+  height: 40px;
+  background-color: #CBD5E1;
+  margin-left: 20px;
+  transition: background-color 0.4s ease;
+}
+.task-line.complete { background-color: #1A3A6B; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(10px); opacity: 1; }
+}
+.animate-scroll-bounce { animation: scrollBounce 2.5s ease-in-out infinite; }
+
+/* GSAP pin spacer bg fix */
+.pin-spacer { background-color: #EBF0F7 !important; }
