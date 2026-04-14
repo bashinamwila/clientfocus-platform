@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSearchParams, Link, useNavigate } from 'react-router-dom'
 import { authClient } from '../auth/authClient'
 
@@ -6,6 +6,15 @@ export default function AcceptInvite() {
   const [searchParams] = useSearchParams()
   const token = searchParams.get('token')
   const navigate = useNavigate()
+  const didLogout = useRef(false)
+
+  // Sign out any existing session once on mount — fire-and-forget
+  useEffect(() => {
+    if (!didLogout.current) {
+      didLogout.current = true
+      authClient.signOut().catch(() => {})
+    }
+  }, [])
 
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -40,8 +49,7 @@ export default function AcceptInvite() {
     if (resetError) {
       setError(resetError.message ?? 'Failed to set password')
     } else {
-      setSuccess(true)
-      setTimeout(() => navigate('/login'), 3000)
+      navigate('/login', { state: { passwordSet: true } })
     }
   }
 

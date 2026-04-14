@@ -40,7 +40,8 @@ const App = () => {
   useEffect(() => {
     initAuth()
     setTokenProvider(getAccessToken)
-  }, [initAuth, getAccessToken])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
   <BrowserRouter>

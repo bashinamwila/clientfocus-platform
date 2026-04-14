@@ -59,6 +59,7 @@ export function getWorkflowStatus(instanceId: string): Promise<WorkflowStatus> {
 
 export interface MyOnboardingResult {
   hasOnboarding: boolean
+  needsOnboarding?: boolean
   workflowType?: string
   workflowInstanceId?: string
   currentTask?: string

@@ -100,8 +100,8 @@ export default function InternalOnboarding() {
           </div>
         )}
 
-        {/* Download Card */}
-        {(currentTask === 'WaitForAppDownload' || currentTask === 'WaitForFirstLogin') && (
+        {/* Download Card — shown for all internal onboarding steps */}
+        {currentTask && (
           <div className="bg-white rounded-xl shadow-lg p-8 md:p-10 text-center">
             <div className="mx-auto mb-6 w-16 h-16 rounded-full bg-brand-bg flex items-center justify-center">
               <Download size={32} className="text-brand-navy" />
@@ -115,7 +115,7 @@ export default function InternalOnboarding() {
             </p>
 
             <a
-              href="https://github.com/bashinamwila/finstatement-studio/releases/latest/download/Financials-Studio-Setup.exe"
+              href={`${import.meta.env.VITE_API_URL || 'http://localhost:5050'}/downloads/Financials-Studio-Setup.exe`}
               className="w-full flex items-center justify-center gap-3 bg-brand-navy text-white py-3.5 rounded-lg text-sm font-semibold hover:bg-brand-blue transition-colors mb-3"
               onClick={() => {
                 // After user clicks download, advance the workflow

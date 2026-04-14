@@ -1,6 +1,19 @@
 import { create } from 'zustand'
 import { authClient } from './authClient'
 
+const AUTH_URL = import.meta.env.VITE_AUTH_URL ?? 'http://localhost:3100'
+
+async function fetchJwt(): Promise<string> {
+  try {
+    const res = await fetch(`${AUTH_URL}/api/auth/token`, { credentials: 'include' })
+    if (!res.ok) return ''
+    const data = await res.json()
+    return data.token ?? ''
+  } catch {
+    return ''
+  }
+}
+
 interface User {
   id: string
   email: string
@@ -50,11 +63,12 @@ export const useAuth = create<AuthState>((set, get) => ({
       return { error: error.message ?? 'Login failed' }
     }
     if (data?.user) {
+      const jwt = await fetchJwt()
       set({
         isAuthenticated: true,
         isLoading: false,
         user: data.user as User,
-        accessToken: data.token ?? '',
+        accessToken: jwt,
       })
     }
     return {}
@@ -92,11 +106,12 @@ export const useAuth = create<AuthState>((set, get) => ({
   initAuth: async () => {
     const { data } = await authClient.getSession()
     if (data?.user) {
+      const jwt = await fetchJwt()
       set({
         isAuthenticated: true,
         isLoading: false,
         user: data.user as User,
-        accessToken: (data as any).token ?? '',
+        accessToken: jwt,
       })
     } else {
       set({ isLoading: false })
@@ -106,12 +121,11 @@ export const useAuth = create<AuthState>((set, get) => ({
   getAccessToken: async () => {
     const { accessToken } = get()
     if (accessToken) return accessToken
-    // Try refreshing session
-    const { data } = await authClient.getSession()
-    if (data) {
-      const token = (data as any).token ?? ''
-      set({ accessToken: token })
-      return token
+    // Fetch JWT from auth service
+    const jwt = await fetchJwt()
+    if (jwt) {
+      set({ accessToken: jwt })
+      return jwt
     }
     return ''
   },

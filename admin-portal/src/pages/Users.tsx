@@ -212,10 +212,21 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
     setIsSubmitting(true)
 
     try {
-      await apiFetch('/api/admin/users/invite', {
+      // 1. Start the InternalStaffInvitation workflow
+      const { workflowInstanceId } = await apiFetch<{ workflowInstanceId: string }>(
+        '/api/workflow/start?definitionId=InternalStaffInvitation',
+        { method: 'POST' }
+      )
+
+      // 2. Wait briefly for the workflow to reach the InviteStaffForm UserTask
+      await new Promise(r => setTimeout(r, 1500))
+
+      // 3. Submit the invite form data to the workflow
+      await apiFetch(`/api/workflow/${workflowInstanceId}/submit`, {
         method: 'POST',
-        body: JSON.stringify({ email, full_name: fullName }),
+        body: JSON.stringify({ data: JSON.stringify({ Data: { FullName: fullName, Email: email }, Action: 'Next' }) }),
       })
+
       onSuccess()
     } catch (err: any) {
       setError(err.message || 'Failed to send invitation')

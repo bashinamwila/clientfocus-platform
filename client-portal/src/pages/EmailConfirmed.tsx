@@ -11,11 +11,9 @@ export default function EmailConfirmed() {
         </div>
 
         <h1 className="font-display font-bold text-3xl text-brand-navy mb-3">Email confirmed</h1>
-        <p className="font-body text-gray-500 text-sm leading-relaxed mb-8">Your account is verified and ready to go. Download Financials Studio to start generating professional financial statements.</p>
+        <p className="font-body text-gray-500 text-sm leading-relaxed mb-8">Your account is verified and ready to go. Sign in to set up your organisation and get started.</p>
 
-        <Link to="/download" className="block w-full bg-brand-navy text-white py-3 rounded-lg text-sm font-semibold hover:bg-brand-blue transition-colors mb-4 text-center">Download Financials Studio</Link>
-
-        <Link to="/login" className="text-sm text-gray-400 hover:text-brand-navy transition-colors">Go to Login</Link>
+        <Link to="/login" className="block w-full bg-brand-navy text-white py-3 rounded-lg text-sm font-semibold hover:bg-brand-blue transition-colors text-center">Sign In</Link>
       </div>
     </section>
   );

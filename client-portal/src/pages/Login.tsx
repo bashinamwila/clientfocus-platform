@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/useAuth'
 import { getMyOnboarding } from '../api/endpoints'
 
 export default function Login() {
   const { login, loginWithGoogle } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const passwordSet = (location.state as any)?.passwordSet === true
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -31,6 +33,11 @@ export default function Login() {
           navigate('/onboarding')
           return
         }
+        // First-time user with no record in the backend yet — start onboarding
+        if (onboarding.needsOnboarding) {
+          navigate('/onboarding')
+          return
+        }
       } catch {
         // If the lookup fails, just go to home
       }
@@ -45,6 +52,12 @@ export default function Login() {
           <h1 className="font-display font-bold text-3xl text-brand-navy mb-2">Welcome back</h1>
           <p className="text-gray-500 text-sm">Sign in to your Financials Studio account</p>
         </div>
+
+        {passwordSet && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+            <p className="text-green-700 text-sm font-medium">Password set successfully. Sign in to continue.</p>
+          </div>
+        )}
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">

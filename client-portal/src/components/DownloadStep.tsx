@@ -11,6 +11,9 @@ interface DownloadStepProps {
 }
 
 export default function DownloadStep({ url, platform, size, onNext, onBack, isSubmitting, showBack = true }: DownloadStepProps) {
+  const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5050'
+  const downloadUrl = url && url.startsWith('/') ? `${apiBase}${url}` : (url || `${apiBase}/downloads/Financials-Studio-Setup.exe`)
+
   return (
     <div>
       <div className="text-center">
@@ -24,7 +27,7 @@ export default function DownloadStep({ url, platform, size, onNext, onBack, isSu
         </p>
 
         <a
-          href={url}
+          href={downloadUrl}
           className="inline-flex items-center justify-center gap-3 bg-brand-navy text-white px-8 py-3.5 rounded-lg text-sm font-semibold hover:bg-brand-blue transition-colors mb-3"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
